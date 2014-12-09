@@ -17,6 +17,10 @@ public class C {
 
     public static void die(Object object) {
         pn(object);
+
+    }
+
+    public static void die() {
         System.exit(1);
     }
 }

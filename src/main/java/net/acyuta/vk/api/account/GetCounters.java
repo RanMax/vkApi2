@@ -16,7 +16,7 @@ public class GetCounters extends AbstractVkMethod {
     /**
      * Флаг, получены ли новые данные
      */
-    boolean clear = true;
+    boolean clear = false;
 
     @Override
     protected boolean recognize(JsonObject response) {
@@ -24,7 +24,7 @@ public class GetCounters extends AbstractVkMethod {
             return false;
         for (Counters a : Counters.values()) {
             if (response.has(a.name())) {
-                clear = false;
+                clear = true;
                 map.put(a.name(), response.get(a.name()).getAsInt());
             }
         }
@@ -50,14 +50,22 @@ public class GetCounters extends AbstractVkMethod {
         return clear;
     }
 
-    public int get(String name) {
-        if (!Counters.has(name))
-            return -1;
-        else if (map.containsKey(name))
-            return map.get(name);
+    public int get(Counters counter) {
+        if (has(counter))
+            return map.get(counter.name());
         else
             return 0;
     }
 
+    public int get(String name) {
+        if (!Counters.has(name))
+            return -1;
+        else
+            return get(Counters.valueOf(name));
+    }
 
+
+    public boolean has(Counters counters) {
+        return map.containsKey(counters.name());
+    }
 }

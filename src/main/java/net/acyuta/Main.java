@@ -3,25 +3,58 @@ package net.acyuta;
 import net.acyuta.utils.C;
 import net.acyuta.vk.Vk;
 import net.acyuta.vk.VkLogic;
+import org.apache.commons.cli.*;
 
 /**
  * Created by acyuta on 05.12.14.
  */
 public class Main {
 
-    public static void main(String[] args) {
-        Vk vk = null;
+    private static Options options = new Options();
+    private static Vk vk = null;
+    private static VkLogic logic = null;
+
+    public static void main(String[] args) throws ParseException {
+        init();
+
+        CommandLineParser parser = new GnuParser();
+        CommandLine line = parser.parse(options, args);
+
+
+        if (!vk.checkAccess() || args.length == 0)
+            usage();
+
+        if (line.hasOption("s"))
+            logic.dailyInfo();
+    }
+
+    private static void init() {
         try {
             vk = Vk.init();
+            logic = new VkLogic(vk);
         } catch (Exception e) {
             C.die(e.getMessage());
         }
-        assert vk != null;
 
-        if (!vk.checkAccess())
-            C.die(vk.usage());
+        OptionGroup messages = new OptionGroup();
+        messages.addOption(OptionBuilder
+                        .withLongOpt("read-all")
+                        .withDescription("Прочитать все сообщения")
+                        .create()
+        );
 
-        VkLogic logic = new VkLogic(vk);
-        logic.dailyInfo();
+        options.addOption(OptionBuilder
+                        .withLongOpt("messages")
+                        .hasOptionalArgs(1)
+                        .create('m')
+        );
+        options.addOptionGroup(messages);
+        options.addOption("u", "usage", false, "Как использовать");
+    }
+
+    private static void usage() {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("cvk.sh", options, false);
+        C.die();
     }
 }

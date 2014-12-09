@@ -153,13 +153,4 @@ public class Vk {
         return true;
     }
 
-    public String usage() {
-        return (new StringBuilder())
-                .append("При первом использовании, пройдите по ссылке \n")
-                .append(getAuthUrl())
-                .append("\nи добавьте поля \ntoken = <ваш код>\nuser_id = <ваш_ID>\nиз адресной строки в ваш файл конфигурации ")
-                .append(CONFIG_FILENAME)
-                .toString();
-    }
-
 }

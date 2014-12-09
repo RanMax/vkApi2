@@ -60,7 +60,7 @@ public class Vk {
                     return init(configFile.getAbsolutePath());
                 else filename = Alias.homeConfigFile;
 
-            } else throw new NoConfigDirException("Отсутствует файл конфигурации '" + Alias.configDirPath + "'");
+            } else throw new NoConfigDirException("Отсутствует папка конфигурации '" + Alias.configDirPath + "'");
         }
         throw new NoConfigFileException("Отсутствует файл конфигурации '" + filename + "'");
     }

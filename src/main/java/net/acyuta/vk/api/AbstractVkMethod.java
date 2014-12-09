@@ -32,7 +32,7 @@ public abstract class AbstractVkMethod implements VkMethod {
         else throw new UnrecognizedResponse("Запрос к Api '".concat(getName()).concat("' не был распознан"));
     }
 
-    abstract boolean recognize(JsonObject response);
+    protected abstract boolean recognize(JsonObject response);
 
     abstract public List<NameValuePair> getArgs();
 }

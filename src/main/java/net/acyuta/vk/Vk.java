@@ -37,9 +37,9 @@ public class Vk {
     }
 
     public static Vk getImplements() {
-        if (implement == null)
+        if (implement != null)
             return implement;
-        throw new IllegalAccessError("Еще не инициирован класс API Vk");
+        else throw new IllegalAccessError("Еще не инициирован класс API Vk");
     }
 
     public static Vk init() throws IOException {

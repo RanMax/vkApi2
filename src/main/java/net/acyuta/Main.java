@@ -24,5 +24,6 @@ public class Main {
             C.die(vk.usage());
 
         VkLogic logic = new VkLogic(vk);
+        logic.dailyInfo();
     }
 }

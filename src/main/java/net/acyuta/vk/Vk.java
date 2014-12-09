@@ -15,69 +15,123 @@ import java.util.Properties;
 public class Vk {
 
     private static String propertyDefaultFilename = "property.ini";
+    private static Vk implement = null;
 
-    private String authUrl;
-    private String code;
     /**
      * Идентификатор моего приложения
      */
-    private static String redirect_url;
+    private String redirect_url = null;
+    private String api_id = null;
+    private String app_code = null;
+    private String app_id = null;
+    private List<String> scope = null;
+    private String method_url = null;
+    private String auth_url = null;
+    private String authUrl = null;
+    private String token = null;
+    private int userId = -1;
+    private Handler handler = null;
 
-    private static String api_id;
-    private static String app_code;
-    private static String app_id;
-    private static List<String> scope;
-    private static String url;
-
-
-    public Vk() throws IOException {
-        init(propertyDefaultFilename);
+    /* Служебная часть */
+    private Vk() {
     }
 
-    public Vk(String filename) throws IOException {
-        init(filename);
+    public static Vk getImplements() {
+        if (implement == null)
+            return implement;
+        throw new IllegalAccessError("Еще не инициирован класс API Vk");
+    }
+
+    public static Vk init() throws IOException {
+        return init(propertyDefaultFilename);
+    }
+
+    public static Vk init(String filename) throws IOException {
+        Properties props = new Properties();
+
+        props.load(new FileInputStream(new File(filename)));
+
+        implement = new Vk();
+
+        implement.app_id = props.getProperty("app_id", null);
+        assert implement.app_id != null;
+
+        implement.app_code = props.getProperty("app_code", null);
+        assert implement.app_code != null;
+
+        implement.auth_url = props.getProperty("auth_url", null);
+        assert implement.auth_url != null;
+
+        implement.method_url = props.getProperty("method_url", null);
+        assert implement.method_url != null;
+
+        implement.token = props.getProperty("token", null);
+        assert implement.token != null;
+
+        implement.userId = Integer.valueOf(props.getProperty("user_id", "-1"));
+        assert implement.userId != -1;
+
+        implement.api_id = "5.27";
+
+        implement.redirect_url = "https://oauth.vk.com/blank.html";
+
+        implement.scope = Arrays.asList("messages", "notifications", "offline", "status", "friends");
+
+        implement.authUrl = (new StringBuilder())
+                .append(implement.auth_url)
+                .append('?')
+                .append("client_id=")
+                .append(implement.app_id)
+                .append("&redirect_uri=")
+                .append(implement.redirect_url)
+                .append("&scope=")
+                .append(StringUtils.join(implement.scope, ','))
+                .append("&display=page")
+                .append("&v=")
+                .append(implement.api_id)
+                .append("&response_type=token")
+                .toString();
+
+
+        implement.handler = new Handler(implement);
+
+        return implement;
     }
 
     public String getAuthUrl() {
         return authUrl;
     }
 
-    private boolean init(String filename) throws IOException {
-        Properties props = new Properties();
+    public String getMethod_url() {
+        return method_url;
+    }
 
-        props.load(new FileInputStream(new File(filename)));
+    public Handler getHandler() {
+        return handler;
+    }
 
-        app_id = props.getProperty("app_id",null);
-        assert app_id != null;
+    public String getToken() {
+        return token;
+    }
 
-        app_code = props.getProperty("app_code",null);
-        assert app_code != null;
+    /* Логическая часть */
 
-        url = props.getProperty("url",null);
-        assert url != null;
+    public boolean checkAccess() {
+        return (token != null && userId != -1) && checkPermissions();
+    }
 
-        code = props.getProperty("code",null);
-
-        api_id = "5.27";
-
-        redirect_url = "https://oauth.vk.com/blank.html";
-
-        scope = Arrays.asList("messages","notifications","offline","status","friends");
-
-        authUrl = (new StringBuilder())
-                .append(url)
-                .append('?')
-                .append("client_id=")
-                .append(app_id)
-                .append("&redirect_uri=")
-                .append(redirect_url)
-                .append("&scope=")
-                .append(StringUtils.join(scope,','))
-                .append("&display=page")
-                .append("&v=")
-                .append(api_id)
-                .toString();
-
+    private boolean checkPermissions() {
+        //TODO Сделать проверочку
         return true;
     }
+
+    public String usage() {
+        return (new StringBuilder())
+                .append("При первом использовании, пройдите по ссылке \n")
+                .append(getAuthUrl())
+                .append("\nи добавьте поля \ntoken = <ваш код>\nuser_id = <ваш_ID>\nиз адресной строки в ваш файл конфигурации ")
+                .append(propertyDefaultFilename)
+                .toString();
+    }
+
 }

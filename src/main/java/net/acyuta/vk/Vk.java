@@ -1,5 +1,9 @@
 package net.acyuta.vk;
 
+import net.acyuta.utils.Alias;
+import net.acyuta.vk.exceptions.ConfigurationException;
+import net.acyuta.vk.exceptions.NoConfigDirException;
+import net.acyuta.vk.exceptions.NoConfigFileException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -14,7 +18,8 @@ import java.util.Properties;
  */
 public class Vk {
 
-    private static String propertyDefaultFilename = "property.ini";
+    public static final String PROGRAM_NAME = "vkc";
+    public static String CONFIG_FILENAME = "property.ini";
     private static Vk implement = null;
 
     /**
@@ -42,31 +47,54 @@ public class Vk {
         else throw new IllegalAccessError("Еще не инициирован класс API Vk");
     }
 
-    public static Vk init() throws IOException {
-        return init(propertyDefaultFilename);
+    public static Vk init() throws ConfigurationException, NoConfigDirException, NoConfigFileException {
+        String filename = CONFIG_FILENAME;
+        if (new File(filename).exists())
+            return init(filename);
+        else {
+            String sep = System.getProperty("file.separator");
+            File configDir = new File(Alias.configDirPath);
+            if (configDir.exists() && configDir.isDirectory() && configDir.canWrite()) {
+                File configFile = new File(Alias.homeConfigFile);
+                if (configFile.exists())
+                    return init(configFile.getAbsolutePath());
+                else filename = Alias.homeConfigFile;
+
+            } else throw new NoConfigDirException("Отсутствует файл конфигурации '" + Alias.configDirPath + "'");
+        }
+        throw new NoConfigFileException("Отсутствует файл конфигурации '" + filename + "'");
     }
 
-    public static Vk init(String filename) throws IOException {
+    public static Vk init(String filename) throws ConfigurationException {
         Properties props = new Properties();
 
-        props.load(new FileInputStream(new File(filename)));
+        try {
+            props.load(new FileInputStream(new File(filename)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         implement = new Vk();
 
         implement.app_id = props.getProperty("app_id", null);
-        assert implement.app_id != null;
+        if (implement.app_id == null)
+            throw new ConfigurationException("No 'app_id' field");
 
         implement.app_code = props.getProperty("app_code", null);
-        assert implement.app_code != null;
+        if (implement.app_code == null)
+            throw new ConfigurationException("No 'app_code' field");
 
         implement.auth_url = props.getProperty("auth_url", null);
-        assert implement.auth_url != null;
+        if (implement.auth_url == null)
+            throw new ConfigurationException("No 'auth_url' field");
 
         implement.method_url = props.getProperty("method_url", null);
-        assert implement.method_url != null;
+        if (implement.method_url == null)
+            throw new ConfigurationException("No 'method_url' field");
 
         implement.token = props.getProperty("token", null);
-        assert implement.token != null;
+        if (implement.token == null)
+            throw new ConfigurationException("No 'token' field");
 
         implement.userId = Integer.valueOf(props.getProperty("user_id", "-1"));
         assert implement.userId != -1;
@@ -130,7 +158,7 @@ public class Vk {
                 .append("При первом использовании, пройдите по ссылке \n")
                 .append(getAuthUrl())
                 .append("\nи добавьте поля \ntoken = <ваш код>\nuser_id = <ваш_ID>\nиз адресной строки в ваш файл конфигурации ")
-                .append(propertyDefaultFilename)
+                .append(CONFIG_FILENAME)
                 .toString();
     }
 

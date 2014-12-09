@@ -1,6 +1,7 @@
 package net.acyuta.vk;
 
 import net.acyuta.utils.C;
+import net.acyuta.vk.api.account.GetCounters;
 import net.acyuta.vk.api.account.GetProfileInfo;
 
 /**
@@ -15,8 +16,8 @@ public class VkLogic {
     }
 
     public void dailyInfo() {
-        GetProfileInfo method = new GetProfileInfo();
-        method.execute();
-        C.pn(method);
+        GetCounters method = (GetCounters) new GetCounters().execute();
+        C.pn("---- Vk Stats ----");
+        C.pn("Непрочитанных сообщений: " + method.get("messages"));
     }
 }

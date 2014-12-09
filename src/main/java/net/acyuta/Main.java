@@ -4,8 +4,6 @@ import net.acyuta.utils.C;
 import net.acyuta.vk.Vk;
 import net.acyuta.vk.VkLogic;
 
-import java.io.IOException;
-
 /**
  * Created by acyuta on 05.12.14.
  */
@@ -15,8 +13,8 @@ public class Main {
         Vk vk = null;
         try {
             vk = Vk.init();
-        } catch (IOException e) {
-            C.die("Ошибка инициализации модуля VK");
+        } catch (Exception e) {
+            C.die(e.getMessage());
         }
         assert vk != null;
 

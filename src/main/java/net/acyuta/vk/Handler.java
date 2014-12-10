@@ -1,5 +1,6 @@
 package net.acyuta.vk;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sun.istack.internal.NotNull;
@@ -32,8 +33,13 @@ public class Handler {
 
     public JsonObject start(VkMethod method, List<NameValuePair> arguments) throws ErrorResponse, UnknownResponse {
         JsonObject jsonObject = new JsonParser().parse(request(method, arguments)).getAsJsonObject();
-        if (jsonObject.has("response"))
+        if (jsonObject.has("response")) {
+            JsonElement element = jsonObject.get("response");
+            if (element.getAsJsonArray().size() == 0)
+                return new JsonObject();
+            else
             return jsonObject.getAsJsonObject("response");
+        }
         if (jsonObject.has("error"))
             throw new ErrorResponse("Запрос вернулся с ошибкой", jsonObject.getAsJsonObject("error"));
         else

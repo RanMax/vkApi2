@@ -20,7 +20,6 @@ public class Main {
         CommandLineParser parser = new GnuParser();
         CommandLine line = parser.parse(options, args);
 
-
         if (!vk.checkAccess() || args.length == 0)
             usage();
 
@@ -50,6 +49,7 @@ public class Main {
         );
         options.addOptionGroup(messages);
         options.addOption("u", "usage", false, "Как использовать");
+        options.addOption("s", "usage", false, "Статистика");
     }
 
     private static void usage() {

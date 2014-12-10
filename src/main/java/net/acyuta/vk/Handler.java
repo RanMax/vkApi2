@@ -35,7 +35,7 @@ public class Handler {
         JsonObject jsonObject = new JsonParser().parse(request(method, arguments)).getAsJsonObject();
         if (jsonObject.has("response")) {
             JsonElement element = jsonObject.get("response");
-            if (element.getAsJsonArray().size() == 0)
+            if (element.isJsonNull())
                 return new JsonObject();
             else
             return jsonObject.getAsJsonObject("response");

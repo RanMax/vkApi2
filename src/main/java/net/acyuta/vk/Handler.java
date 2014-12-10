@@ -35,10 +35,9 @@ public class Handler {
         JsonObject jsonObject = new JsonParser().parse(request(method, arguments)).getAsJsonObject();
         if (jsonObject.has("response")) {
             JsonElement element = jsonObject.get("response");
-            if (element.isJsonNull())
+            if (element.isJsonNull() || (element.isJsonArray() && element.getAsJsonArray().size() == 0))
                 return new JsonObject();
-            else
-            return jsonObject.getAsJsonObject("response");
+            else return jsonObject.getAsJsonObject("response");
         }
         if (jsonObject.has("error"))
             throw new ErrorResponse("Запрос вернулся с ошибкой", jsonObject.getAsJsonObject("error"));

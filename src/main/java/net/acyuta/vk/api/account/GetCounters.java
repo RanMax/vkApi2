@@ -2,6 +2,7 @@ package net.acyuta.vk.api.account;
 
 import com.google.gson.JsonObject;
 import net.acyuta.vk.api.AbstractVkMethod;
+import net.acyuta.vk.api.account.util.Counters;
 import org.apache.http.NameValuePair;
 
 import java.util.HashMap;
@@ -19,7 +20,7 @@ public class GetCounters extends AbstractVkMethod {
     boolean clear = false;
 
     @Override
-    protected boolean recognize(JsonObject response) {
+    public boolean recognize(JsonObject response) {
         if (response == null)
             return false;
         for (Counters a : Counters.values()) {
@@ -39,11 +40,6 @@ public class GetCounters extends AbstractVkMethod {
     @Override
     public String getName() {
         return "account.getCounters";
-    }
-
-    @Override
-    public boolean isNew() {
-        return false;
     }
 
     public boolean hasNew() {

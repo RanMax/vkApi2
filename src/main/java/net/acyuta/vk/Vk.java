@@ -26,7 +26,7 @@ public class Vk {
      * Идентификатор моего приложения
      */
     private String redirect_url = null;
-    private String api_id = null;
+    private String api_version = null;
     private String app_code = null;
     private String app_id = null;
     private List<String> scope = null;
@@ -99,7 +99,7 @@ public class Vk {
         implement.userId = Integer.valueOf(props.getProperty("user_id", "-1"));
         assert implement.userId != -1;
 
-        implement.api_id = "5.27";
+        implement.api_version = "5.27";
 
         implement.redirect_url = "https://oauth.vk.com/blank.html";
 
@@ -116,7 +116,7 @@ public class Vk {
                 .append(StringUtils.join(implement.scope, ','))
                 .append("&display=page")
                 .append("&v=")
-                .append(implement.api_id)
+                .append(implement.api_version)
                 .append("&response_type=token")
                 .toString();
 
@@ -153,4 +153,7 @@ public class Vk {
         return true;
     }
 
+    public String getVersion() {
+        return api_version;
+    }
 }

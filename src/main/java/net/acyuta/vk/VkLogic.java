@@ -1,8 +1,9 @@
 package net.acyuta.vk;
 
 import net.acyuta.utils.C;
-import net.acyuta.vk.api.account.Counters;
 import net.acyuta.vk.api.account.GetCounters;
+import net.acyuta.vk.api.account.util.Counters;
+import net.acyuta.vk.api.messages.GetDialogs;
 
 /**
  * Created by acyuta on 09.12.14.
@@ -20,7 +21,6 @@ public class VkLogic {
      */
     public void dailyInfo() {
         GetCounters method = (GetCounters) new GetCounters().execute();
-        C.pn("---- Vk Stats ----");
         if (method.hasNew()) {
             if (method.has(Counters.messages))
                 C.pn("Непрочитанных сообщений: " + method.get(Counters.messages));
@@ -36,5 +36,11 @@ public class VkLogic {
             C.pn("Ничего нового :(");
         }
 
+    }
+
+    public void printUnread() {
+        C.pn("Dummy Unread Messages");
+        GetDialogs dialogs = new GetDialogs();
+        dialogs.execute();
     }
 }

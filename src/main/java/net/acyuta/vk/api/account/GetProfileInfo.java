@@ -19,7 +19,7 @@ public class GetProfileInfo extends AbstractVkMethod {
     private City city;
 
     @Override
-    protected boolean recognize(JsonObject response) {
+    public boolean recognize(JsonObject response) {
         if (response == null)
             return false;
         firstName = response.get("first_name").getAsString();
@@ -46,11 +46,6 @@ public class GetProfileInfo extends AbstractVkMethod {
     @Override
     public String getName() {
         return "account.getProfileInfo";
-    }
-
-    @Override
-    public boolean isNew() {
-        return firstName.isEmpty() || lastName.isEmpty();
     }
 
     @Override

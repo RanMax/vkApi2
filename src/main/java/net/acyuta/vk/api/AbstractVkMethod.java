@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by acyuta on 09.12.14.
  */
-public abstract class AbstractVkMethod implements VkMethod {
+public abstract class AbstractVkMethod implements VkMethod, RecognizeJson {
     private static Handler handler = Vk.getImplements().getHandler();
 
     @Override
@@ -31,8 +31,6 @@ public abstract class AbstractVkMethod implements VkMethod {
             return this;
         else throw new UnrecognizedResponse("Запрос к Api '".concat(getName()).concat("' не был распознан"));
     }
-
-    protected abstract boolean recognize(JsonObject response);
 
     abstract public List<NameValuePair> getArgs();
 }

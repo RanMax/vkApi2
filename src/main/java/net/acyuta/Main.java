@@ -20,11 +20,15 @@ public class Main {
         CommandLineParser parser = new GnuParser();
         CommandLine line = parser.parse(options, args);
 
+
         if (!vk.checkAccess() || args.length == 0)
             usage();
 
         if (line.hasOption("s"))
             logic.dailyInfo();
+
+        if (line.hasOption("m"))
+            logic.printUnread();
     }
 
     private static void init() {
@@ -43,13 +47,16 @@ public class Main {
         );
 
         options.addOption(OptionBuilder
-                        .withLongOpt("messages")
-                        .hasOptionalArgs(1)
+                        .withLongOpt("message")
+                        .withDescription("Написать сообщение")
+                        .hasOptionalArgs(2)
+                        .withArgName("id")
+                        .withArgName("message")
                         .create('m')
         );
         options.addOptionGroup(messages);
         options.addOption("u", "usage", false, "Как использовать");
-        options.addOption("s", "usage", false, "Статистика");
+        options.addOption("s", "stats", false, "Статистика");
     }
 
     private static void usage() {

@@ -14,7 +14,7 @@ public class SetOffline extends AbstractVkMethod {
     boolean success = false;
 
     @Override
-    protected boolean recognize(JsonObject response) {
+    public boolean recognize(JsonObject response) {
         if (response.getAsInt() == 1)
             this.success = true;
         return true;
@@ -30,10 +30,6 @@ public class SetOffline extends AbstractVkMethod {
         return "account.setOffline";
     }
 
-    @Override
-    public boolean isNew() {
-        return false;
-    }
 
     public boolean isSuccess() {
         return success;

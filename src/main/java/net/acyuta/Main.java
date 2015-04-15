@@ -5,6 +5,8 @@ import net.acyuta.vk.Vk;
 import net.acyuta.vk.VkLogic;
 import org.apache.commons.cli.*;
 
+import java.awt.*;
+
 /**
  * Created by acyuta on 05.12.14.
  */
@@ -17,18 +19,13 @@ public class Main {
     public static void main(String[] args) throws ParseException {
         init();
 
-        CommandLineParser parser = new GnuParser();
-        CommandLine line = parser.parse(options, args);
-
-
-        if (!vk.checkAccess() || args.length == 0)
-            usage();
-
-        if (line.hasOption("s"))
-            logic.dailyInfo();
-
-        if (line.hasOption("m"))
-            logic.printUnread();
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                MainFrame frame = new MainFrame(logic);
+                frame.setVisible(true);
+            }
+        });
     }
 
     private static void init() {

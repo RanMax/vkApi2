@@ -5,10 +5,12 @@ import net.acyuta.vk.api.account.GetCounters;
 import net.acyuta.vk.api.account.util.Counters;
 import net.acyuta.vk.api.messages.GetDialogs;
 import net.acyuta.vk.api.messages.GetMultidialogList;
+import net.acyuta.vk.api.messages.utils.ChatDialog;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * Created by acyuta on 09.12.14.
@@ -49,13 +51,13 @@ public class VkLogic {
         dialogs.execute();
     }
 
-    public void showAllMultidialogs() {
+    public Map<Integer,ChatDialog> getAllMultidialogs() {
         int step = 200;
         C.pn("All Multi Dialogs");
         GetMultidialogList multidialogList = new GetMultidialogList();
         multidialogList.setArgs(Arrays.asList(
                 (NameValuePair) new BasicNameValuePair("count", String.valueOf(step)),
-                (NameValuePair) new BasicNameValuePair("preview_length", "10")
+                (NameValuePair) new BasicNameValuePair("preview_length", "50")
         ));
         multidialogList.execute();
         int count = multidialogList.getCount();
@@ -76,6 +78,8 @@ public class VkLogic {
             multidialogList.execute();
         }
         C.pn(multidialogList.getSet());
+        return multidialogList.getSet();
 
     }
+
 }

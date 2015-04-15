@@ -10,7 +10,5 @@ package net.acyuta.vk.api;
 public interface VkMethod {
     String getName();
 
-    boolean isNew();
-
     VkMethod execute();
 }

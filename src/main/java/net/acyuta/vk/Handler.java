@@ -32,7 +32,9 @@ public class Handler {
     }
 
     public JsonObject start(VkMethod method, List<NameValuePair> arguments) throws ErrorResponse, UnknownResponse {
-        JsonObject jsonObject = new JsonParser().parse(request(method, arguments)).getAsJsonObject();
+        String answer = request(method, arguments);
+        //C.pn("Получено с сервера: ".concat(answer));
+        JsonObject jsonObject = new JsonParser().parse(answer).getAsJsonObject();
         if (jsonObject.has("response")) {
             JsonElement element = jsonObject.get("response");
             if (element.isJsonNull() || (element.isJsonArray() && element.getAsJsonArray().size() == 0))
@@ -53,7 +55,10 @@ public class Handler {
                 .concat("method/")
                 .concat(method.getName())
                 .concat("?access_token=")
-                .concat(parent.getToken()));
+                .concat(parent.getToken())
+                .concat("&v=")
+                .concat(parent.getVersion())
+        );
 
         try {
             if (arguments != null)

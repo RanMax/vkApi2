@@ -1,4 +1,4 @@
-package net.acyuta.vk.api.account;
+package net.acyuta.vk.api.account.util;
 
 /**
  * Created by acyuta on 09.12.14.
